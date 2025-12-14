@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hub de Escenas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <script>
+        // Limitar movimiento del jugador
+        AFRAME.registerComponent('stay-in-area', {
+            schema: {
+                minX: { default: -8 },
+                maxX: { default: 8 },
+                minZ: { default: -6 },
+                maxZ: { default: 6 },
+                minY: { default: 1.6 },
+                maxY: { default: 2 }
+            },
+            tick() {
+                const p = this.el.object3D.position;
+                p.x = Math.min(this.data.maxX, Math.max(this.data.minX, p.x));
+                p.z = Math.min(this.data.maxZ, Math.max(this.data.minZ, p.z));
+                p.y = Math.min(this.data.maxY, Math.max(this.data.minY, p.y));
+            }
+        });
+
+        // Click para cambiar de escena
+        AFRAME.registerComponent('go-to', {
+            schema: { url: { type: 'string' } },
+            init() {
+                this.el.addEventListener('click', () => {
+                    window.location.href = this.data.url;
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+<a-scene cursor="rayOrigin: mouse">
+
+    <!-- ================= SUELO ================= -->
+    <a-plane rotation="-90 0 0" width="20" height="16" color="#eeeeee"></a-plane>
+
+    <!-- ================= PAREDES ================= -->
+    <a-box position="0 1.5 -8" width="20" height="3" depth="0.3" color="#cfd8dc"></a-box>
+    <a-box position="0 1.5 8" width="20" height="3" depth="0.3" color="#cfd8dc"></a-box>
+    <a-box position="-10 1.5 0" width="0.3" height="3" depth="16" color="#cfd8dc"></a-box>
+    <a-box position="10 1.5 0" width="0.3" height="3" depth="16" color="#cfd8dc"></a-box>
+
+    <!-- ================= ILUMINACIÓN ================= -->
+    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; intensity: 0.6" position="0 5 3"></a-entity>
+
+    <!-- ================= JUGADOR ================= -->
+    <a-entity id="player"
+        position="0 1.6 5"
+        wasd-controls="acceleration: 35"
+        look-controls
+        stay-in-area>
+
+        <a-entity camera></a-entity>
+    </a-entity>
+
+    <!-- ================= PORTALES ================= -->
+
+    <!-- TIENDA -->
+    <a-entity position="-5 0 -4" go-to="url: escena-360.html">
+        <a-box width="3" height="4" depth="0.3" color="#a5d6a7"></a-box>
+        <a-text value="TIENDA"
+            position="0 2.3 0.2"
+            align="center"
+            width="4"
+            color="#1b5e20"></a-text>
+        <a-text value="ENTRAR"
+            position="0 -1.5 0.2"
+            align="center"
+            width="2"
+            color="#000"></a-text>
+    </a-entity>
+
+    <!-- ALMACÉN -->
+    <a-entity position="0 0 -4" go-to="url: escena-proceso.html">
+        <a-box width="3" height="4" depth="0.3" color="#90caf9"></a-box>
+        <a-text value="ALMACEN"
+            position="0 2.3 0.2"
+            align="center"
+            width="4"
+            color="#0d47a1"></a-text>
+        <a-text value="ENTRAR"
+            position="0 -1.5 0.2"
+            align="center"
+            width="2"
+            color="#000"></a-text>
+    </a-entity>
+
+    <!-- MINIJUEGO -->
+    <a-entity position="5 0 -4" go-to="url: escena-resultado.html">
+        <a-box width="3" height="4" depth="0.3" color="#ffcc80"></a-box>
+        <a-text value="MINIJUEGO"
+            position="0 2.3 0.2"
+            align="center"
+            width="4"
+            color="#e65100"></a-text>
+        <a-text value="JUGAR"
+            position="0 -1.5 0.2"
+            align="center"
+            width="2"
+            color="#000"></a-text>
+    </a-entity>
+
+    <!-- ================= TÍTULO ================= -->
+    <a-text value="CAMINA Y ELIGE UNA ESCENA"
+        position="0 3.8 -6"
+        align="center"
+        width="8"
+        color="#000"></a-text>
+
+</a-scene>
+</body>
+</html>

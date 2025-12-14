@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mostrador (2)
+* source:	https://sketchfab.com/3d-models/mostrador-2-72ce7fcbf7924b98b9aa688407aa76b2
+* author:	alex.garcia44 (https://sketchfab.com/alex.garcia44)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mostrador (2)" (https://sketchfab.com/3d-models/mostrador-2-72ce7fcbf7924b98b9aa688407aa76b2) by alex.garcia44 (https://sketchfab.com/alex.garcia44) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

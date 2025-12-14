@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minijuego - Recoger Producto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <script>
+        AFRAME.registerComponent('stay-in-room', {
+            schema: {
+                minX: { default: -4 },
+                maxX: { default: 4 },
+                minZ: { default: -4 },
+                maxZ: { default: 4 }
+            },
+            tick() {
+                const p = this.el.object3D.position;
+                p.x = Math.min(this.data.maxX, Math.max(this.data.minX, p.x));
+                p.z = Math.min(this.data.maxZ, Math.max(this.data.minZ, p.z));
+            }
+        });
+
+        AFRAME.registerComponent('pick-product', {
+            init() {
+                this.collected = false;
+                this.indicator = document.querySelector('#indicador');
+
+                window.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' && !this.collected) {
+                        const cam = document.querySelector('#camera').object3D;
+                        const prod = this.el.object3D;
+                        const distance = cam.position.distanceTo(prod.position);
+
+                        if (distance < 1.5) {
+                            this.collected = true;
+                            this.el.setAttribute('visible', false);
+                            document.querySelector('#mensaje')
+                                .setAttribute('value', '¡PRODUCTO RECOGIDO!');
+                            this.indicator.setAttribute('visible', false);
+                        }
+                    }
+                });
+            },
+            tick() {
+                if (this.collected) return;
+
+                const cam = document.querySelector('#camera').object3D;
+                const prod = this.el.object3D;
+                const distance = cam.position.distanceTo(prod.position);
+
+                this.indicator.setAttribute('visible', distance < 1.5);
+            }
+        });
+    </script>
+</head>
+
+<body>
+<a-scene>
+
+    <a-plane rotation="-90 0 0" width="10" height="10" color="#eeeeee"></a-plane>
+
+    <a-box position="0 1.5 -5" width="10" height="3" depth="0.2" color="#cfd8dc"></a-box>
+    <a-box position="0 1.5 5" width="10" height="3" depth="0.2" color="#cfd8dc"></a-box>
+    <a-box position="-5 1.5 0" width="0.2" height="3" depth="10" color="#cfd8dc"></a-box>
+    <a-box position="5 1.5 0" width="0.2" height="3" depth="10" color="#cfd8dc"></a-box>
+
+    <a-entity position="0 1.6 3"
+        wasd-controls
+        look-controls
+        stay-in-room>
+        <a-entity id="camera" camera></a-entity>
+    </a-entity>
+
+    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; intensity: 0.5" position="0 4 2"></a-entity>
+
+    <a-entity position="0 0 -2">
+
+        <a-box position="0 1.2 0" width="2.2" height="2.4" depth="0.3" color="#8d6e63"></a-box>
+
+        <a-box position="0 0.6 0.15" width="2" height="0.05" depth="0.25" color="#d7ccc8"></a-box>
+        <a-box position="0 1.2 0.15" width="2" height="0.05" depth="0.25" color="#d7ccc8"></a-box>
+        <a-box position="0 1.8 0.15" width="2" height="0.05" depth="0.25" color="#d7ccc8"></a-box>
+
+        <a-box position="-0.6 0.8 0.35" width="0.25" height="0.35" depth="0.25" color="#90caf9"></a-box>
+        <a-box position="0.6 1.8 0.35" width="0.25" height="0.35" depth="0.25" color="#a5d6a7"></a-box>
+
+        <a-box id="producto"
+            position="0 1.3 0.35"
+            width="0.35"
+            height="0.45"
+            depth="0.35"
+            color="#ff7043"
+            animation="property: scale; to: 1.1 1.1 1.1; dir: alternate; dur: 800; loop: true"
+            pick-product>
+        </a-box>
+
+    </a-entity>
+
+    <a-ring id="indicador"
+        position="0 1.3 -1.5"
+        radius-inner="0.35"
+        radius-outer="0.45"
+        color="#66bb6a"
+        visible="false">
+    </a-ring>
+
+    <a-text
+        value="ACERCATE AL PRODUCTO Y PULSA ESPACIO"
+        position="0 2.8 -1"
+        align="center"
+        width="4"
+        color="#000">
+    </a-text>
+
+    <a-text
+        id="mensaje"
+        value=""
+        position="0 2.3 -1"
+        align="center"
+        width="4"
+        color="#2e7d32">
+    </a-text>
+
+</a-scene>
+</body>
+</html>

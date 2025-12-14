@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Mercado - Mostrador 3D</title>
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <script>
+        AFRAME.registerComponent('stay-in-room', {
+            schema: {
+                minX: { default: -4.5 },
+                maxX: { default: 4.5 },
+                minZ: { default: -4.5 },
+                maxZ: { default: 4.5 },
+                minY: { default: 1.0 },
+                maxY: { default: 2.2 }
+            },
+            tick() {
+                const p = this.el.object3D.position;
+                p.x = Math.min(this.data.maxX, Math.max(this.data.minX, p.x));
+                p.z = Math.min(this.data.maxZ, Math.max(this.data.minZ, p.z));
+                p.y = Math.min(this.data.maxY, Math.max(this.data.minY, p.y));
+            }
+        });
+
+        AFRAME.registerComponent('go-to', {
+            schema: { url: { type: 'string' } },
+            init() {
+                this.el.addEventListener('click', () => {
+                    window.location.href = this.data.url;
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+<a-scene cursor="rayOrigin: mouse">
+
+    <a-assets>
+        <audio id="musica" src="./assets/sounds/ambient.mp3"></audio>
+    </a-assets>
+
+
+    <a-entity sound="src:#musica; autoplay:true; loop:true; volume:0.7"></a-entity>
+
+
+    <a-plane rotation="-90 0 0" width="10" height="10" color="#cccccc"></a-plane>
+
+
+    <a-box position="0 1.5 -5" depth="0.1" height="3" width="10" color="#e0e0e0"></a-box>
+    <a-box position="0 1.5 5" depth="0.1" height="3" width="10" color="#e0e0e0"></a-box>
+    <a-box position="-5 1.5 0" depth="10" height="3" width="0.1" color="#e0e0e0"></a-box>
+    <a-box position="5 1.5 0" depth="10" height="3" width="0.1" color="#e0e0e0"></a-box>
+
+
+    <a-plane position="0 3 0" rotation="90 0 0" width="10" height="10" color="#dcdcdc"></a-plane>
+
+
+    <a-entity position="0 1.6 0"
+        stay-in-room
+        wasd-controls="acceleration:30"
+        look-controls>
+        <a-entity camera></a-entity>
+    </a-entity>
+
+
+    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; intensity: 0.6" position="0 4 1"></a-entity>
+
+
+    <a-entity position="2.5 0 3.5">
+        <a-box position="0 0.5 0" width="2" height="1" depth="0.8" color="#8d6e63"></a-box>
+        <a-box position="0 1.05 0" width="2.05" height="0.1" depth="0.85" color="#5d4037"></a-box>
+        <a-cylinder position="0.6 1.1 0.1" radius="0.07" height="0.25" color="#4fc3f7"></a-cylinder>
+    </a-entity>
+
+
+    <a-entity position="-3.5 0 -1">
+        <a-box position="0 1 0" width="1.2" height="2" depth="0.4" color="#a1887f"></a-box>
+
+        <a-box position="0 0.6 0.25" width="1" height="0.05" depth="0.3" color="#d7ccc8"></a-box>
+        <a-box position="0 1.2 0.25" width="1" height="0.05" depth="0.3" color="#d7ccc8"></a-box>
+
+        <a-box position="-0.3 0.8 0.4" width="0.2" height="0.3" depth="0.2" color="#ff7043"></a-box>
+        <a-box position="0.3 1.4 0.4" width="0.2" height="0.3" depth="0.2" color="#4db6ac"></a-box>
+    </a-entity>
+
+
+    <a-entity position="3.8 0 -3.8">
+        <a-cylinder radius="0.25" height="0.4" color="#6d4c41"></a-cylinder>
+        <a-sphere position="0 0.6 0" radius="0.45" color="#66bb6a"></a-sphere>
+    </a-entity>
+
+
+    <a-plane position="0 2.4 4.78" width="2.5" height="0.9" color="#2e7d32"
+        animation="property: scale; to: 1.05 1.05 1; dir: alternate; dur: 2000; loop: true">
+        <a-text value="MINI MERCADO" align="center" width="2.4" position="0 0 0.01"></a-text>
+    </a-plane>
+
+
+    <a-entity position="0 1.4 -4.6">
+        <a-plane width="6" height="1.8" color="#ffffff"></a-plane>
+
+        <a-entity position="-2 0 0.01" go-to="url: escena-360.html">
+            <a-box width="1.6" height="0.7" depth="0.2" color="#a5d6a7"></a-box>
+            <a-text value="TIENDA" align="center" position="0 0 0.15"></a-text>
+        </a-entity>
+
+        <a-entity position="0 0 0.01" go-to="url: escena-proceso.html">
+            <a-box width="1.6" height="0.7" depth="0.2" color="#90caf9"></a-box>
+            <a-text value="ALMACÉN" align="center" position="0 0 0.15"></a-text>
+        </a-entity>
+
+        <a-entity position="2 0 0.01" go-to="url: escena-resultado.html">
+            <a-box width="1.6" height="0.7" depth="0.2" color="#ffcc80"></a-box>
+            <a-text value="MINIJUEGO" align="center" position="0 0 0.15"></a-text>
+        </a-entity>
+    </a-entity>
+
+</a-scene>
+</body>
+</html>
+
+
